@@ -1,0 +1,95 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.HashMap;
+
+public class AIChatbot extends JFrame implements ActionListener {
+
+    JTextArea chatArea;
+    JTextField inputField;
+    JButton sendButton;
+
+    HashMap<String, String> responses;
+
+    public AIChatbot() {
+
+        setTitle("AI Chatbot");
+        setSize(500, 500);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new BorderLayout());
+
+        chatArea = new JTextArea();
+        chatArea.setEditable(false);
+        chatArea.setFont(new Font("Arial", Font.PLAIN, 15));
+
+        JScrollPane scrollPane = new JScrollPane(chatArea);
+
+        inputField = new JTextField();
+
+        sendButton = new JButton("Send");
+        sendButton.addActionListener(this);
+
+        JPanel bottomPanel = new JPanel(new BorderLayout());
+        bottomPanel.add(inputField, BorderLayout.CENTER);
+        bottomPanel.add(sendButton, BorderLayout.EAST);
+
+        add(scrollPane, BorderLayout.CENTER);
+        add(bottomPanel, BorderLayout.SOUTH);
+
+        initializeResponses();
+
+        chatArea.append("Bot: Hello! I am your AI Chatbot.\n");
+        chatArea.append("Bot: Ask me anything.\n\n");
+
+        setVisible(true);
+    }
+
+    private void initializeResponses() {
+
+        responses = new HashMap<>();
+
+        responses.put("hello", "Hello! How can I help you?");
+        responses.put("hi", "Hi! Nice to meet you.");
+        responses.put("how are you", "I am doing great. Thanks for asking.");
+        responses.put("your name", "I am a Java AI Chatbot.");
+        responses.put("java", "Java is an object-oriented programming language.");
+        responses.put("ai", "Artificial Intelligence enables machines to simulate human intelligence.");
+        responses.put("nlp", "Natural Language Processing helps computers understand human language.");
+        responses.put("bye", "Goodbye! Have a wonderful day.");
+    }
+
+    private String getResponse(String message) {
+
+        message = message.toLowerCase();
+
+        for (String key : responses.keySet()) {
+
+            if (message.contains(key)) {
+                return responses.get(key);
+            }
+        }
+
+        return "Sorry, I don't understand that. Please ask another question.";
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
+        String userMessage = inputField.getText();
+
+        if (userMessage.trim().isEmpty())
+            return;
+
+        chatArea.append("You: " + userMessage + "\n");
+
+        String botReply = getResponse(userMessage);
+
+        chatArea.append("Bot: " + botReply + "\n\n");
+
+        inputField.setText("");
+    }
+
+    public static void main(String[] args) {
+        new AIChatbot();
+    }
+}
